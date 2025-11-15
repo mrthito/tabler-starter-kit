@@ -17,8 +17,11 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        if (Admin::count() > 0) {
+            abort(404);
+        }
         return view('admin.auth.register');
     }
 
@@ -29,6 +32,9 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (Admin::count() > 0) {
+            abort(404);
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . Admin::class],
