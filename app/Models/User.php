@@ -3,14 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+use App\Traits\HasRole;
+use App\Traits\HasEncrypt;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable, HasRole, HasEncrypt;
 
     /**
      * The attributes that are mass assignable.
@@ -18,10 +19,18 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'role_id',
         'name',
         'email',
         'password',
     ];
+
+    /**
+     * The attributes that should be encrypted.
+     *
+     * @var list<string>
+     */
+    protected $encryptable = ['name', 'email'];
 
     /**
      * The attributes that should be hidden for serialization.
