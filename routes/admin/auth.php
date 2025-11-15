@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
+use App\Http\Controllers\Admin\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
+        Route::get('login/2fa', [TwoFactorAuthenticationController::class, 'create'])
+            ->name('login.2fa');
+
+        Route::post('login/2fa', [TwoFactorAuthenticationController::class, 'store']);
+
+        Route::post('login/2fa/resend', [TwoFactorAuthenticationController::class, 'resend'])
+            ->name('login.2fa.resend')
+            ->middleware('ratelimit:resend-code,2');
+
         Route::get('verify-email', EmailVerificationPromptController::class)
             ->name('verification.notice');
 

@@ -29,6 +29,12 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate('admin');
 
+        $user = Auth::guard('admin')->user();
+        if ($user->twoFactorAuthEnabled()) {
+            $user->sendTwoFactorAuthCode();
+            return redirect()->route('admin.login.2fa')->with('error', __('Two factor authentication is not enabled.'));
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('admin.dashboard', absolute: false));

@@ -10,6 +10,11 @@
 
             <form action="{{ route('admin.password.confirm') }}" method="POST">
                 @csrf
+                <div class="mb-4">
+                    <span class="avatar avatar-xl mb-3"
+                        style="background-image: url({{ Auth::guard('admin')->user()->avatar }})"> </span>
+                    <h3>{{ Auth::guard('admin')->user()->name }}</h3>
+                </div>
                 <div class="mb-2">
                     <label class="form-label">
                         {{ __('Password') }}

@@ -27,4 +27,6 @@
     @import url("https://rsms.me/inter/inter.css");
 </style>
 
+{!! ToastMagic::styles() !!}
+
 @stack('styles')

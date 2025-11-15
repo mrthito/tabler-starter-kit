@@ -18,11 +18,6 @@
                 <div class="mb-3">
                     <label class="form-label">
                         {{ __('Password') }}
-                        <span class="form-label-description">
-                            <a href="{{ route('admin.password.request') }}">
-                                {{ __('I forgot password') }}
-                            </a>
-                        </span>
                     </label>
                     <div class="input-group input-group-flat">
                         <input type="password" class="form-control" placeholder="{{ __('Your password') }}"

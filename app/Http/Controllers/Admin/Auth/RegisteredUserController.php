@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $admin = Admin::create([
+            'role_id' => Role::first()->id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
