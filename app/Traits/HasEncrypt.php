@@ -34,7 +34,7 @@ trait HasEncrypt
     /**
      * Automatically encrypt fields before saving.
      */
-    public function setAttribute($key, $value)
+    public function setAsttribute($key, $value)
     {
         if (isset($this->encryptable) && in_array($key, $this->encryptable)) {
 
@@ -50,7 +50,7 @@ trait HasEncrypt
     /**
      * Automatically decrypt fields when retrieving.
      */
-    public function getAttribute($key)
+    public function getAsttribute($key)
     {
         $value = parent::getAttribute($key);
 

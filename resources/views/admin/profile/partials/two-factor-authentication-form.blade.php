@@ -149,15 +149,17 @@
         </div>
     @else
         <div class="mb-4">
-            <span class="badge bg-success">{{ __('Enabled') }}</span>
+            <span class="badge bg-success-lt">{{ __('Enabled') }}</span>
             @if ($mfaHelper->method)
-                <span class="badge bg-info ms-2" id="current-method-badge">
-                    @if ($mfaHelper->method->value === 3)
+                <span class="badge bg-info-lt ms-2" id="current-method-badge">
+                    @if ($mfaHelper->method === \App\Enums\MFAMethods::GOOGLE_AUTHENTICATOR)
                         {{ __('Google Authenticator') }}
-                    @elseif($mfaHelper->method->value === 1)
+                    @elseif($mfaHelper->method === \App\Enums\MFAMethods::EMAIL)
                         {{ __('Email') }}
-                    @elseif($mfaHelper->method->value === 2)
+                    @elseif($mfaHelper->method === \App\Enums\MFAMethods::SMS)
                         {{ __('SMS') }}
+                    @else
+                        {{ __('None') }}
                     @endif
                 </span>
             @endif

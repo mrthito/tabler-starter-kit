@@ -4,7 +4,10 @@
         <div class="card-body">
             <h2 class="h2 text-center mb-4">{{ __('Two Factor Verification') }}</h2>
             <p class="my-4 text-center">
-                {{ __('Enter the verification code sent to your email address.') }}
+                {{ $instructions ?? __('Enter the verification code.') }}
+            </p>
+            <p class="text-muted text-center small mb-4">
+                {{ __('You can also use a recovery code if you have one.') }}
             </p>
             <form action="{{ route('admin.login.2fa') }}" method="POST">
                 @csrf
@@ -56,13 +59,15 @@
                             </div>
                         @enderror
                     </div>
-                    <div class="text-end mt-2">
-                        <button type="button" class="btn text-muted btn-sm gap-2 d-inline-flex align-items-end"
-                            onclick="document.getElementById('resend').submit()">
-                            {{ __('Resend code') }}
-                            <i class="ti ti-refresh icon icon-1"></i>
-                        </button>
-                    </div>
+                    @if ($showResend ?? false)
+                        <div class="text-end mt-2">
+                            <button type="button" class="btn text-muted btn-sm gap-2 d-inline-flex align-items-end"
+                                onclick="document.getElementById('resend').submit()">
+                                {{ __('Resend code') }}
+                                <i class="ti ti-refresh icon icon-1"></i>
+                            </button>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="form-footer">
@@ -92,23 +97,67 @@
 
     @push('scripts')
         <script>
-            // make sure pasting the code works
-            document.querySelectorAll('[data-code-input]').forEach(input => {
-                input.addEventListener('paste', (e) => {
-                    e.preventDefault();
-                    const code = e.clipboardData.getData('text').trim();
-                    const codeArray = code.split('');
-                    codeArray.forEach((char, index) => {
-                        document.querySelector(`[name="code[${index + 1}]"]`).value = char;
+            document.addEventListener('DOMContentLoaded', function() {
+                const inputs = document.querySelectorAll('[data-code-input]');
+
+                // Handle paste event
+                inputs.forEach(input => {
+                    input.addEventListener('paste', (e) => {
+                        e.preventDefault();
+                        const pastedData = e.clipboardData.getData('text').trim();
+                        const codeArray = pastedData.split('').slice(0, 6);
+
+                        codeArray.forEach((char, index) => {
+                            if (index < inputs.length) {
+                                inputs[index].value = char;
+                            }
+                        });
+
+                        // Focus the next empty input or the last one
+                        const nextEmptyIndex = codeArray.length;
+                        if (nextEmptyIndex < inputs.length) {
+                            inputs[nextEmptyIndex].focus();
+                        } else {
+                            inputs[inputs.length - 1].focus();
+                        }
                     });
                 });
-            });
-            document.querySelectorAll('[data-code-input]').forEach(input => {
-                input.addEventListener('input', (e) => {
-                    const code = e.target.value.trim();
-                    const codeArray = code.split('');
-                    codeArray.forEach((char, index) => {
-                        document.querySelector(`[name="code[${index + 1}]"]`).value = char;
+
+                // Handle input events (typing)
+                inputs.forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        // Only allow numeric characters
+                        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+                        // If a character was entered, move to next input
+                        if (e.target.value.length > 0 && index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    });
+
+                    // Handle keydown for backspace/delete
+                    input.addEventListener('keydown', (e) => {
+                        // If backspace is pressed and input is empty, move to previous input
+                        if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                            e.preventDefault();
+                            inputs[index - 1].focus();
+                            inputs[index - 1].value = '';
+                        }
+
+                        // Handle arrow keys
+                        if (e.key === 'ArrowLeft' && index > 0) {
+                            e.preventDefault();
+                            inputs[index - 1].focus();
+                        }
+                        if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+                            e.preventDefault();
+                            inputs[index + 1].focus();
+                        }
+                    });
+
+                    // Handle focus - select all text when focused
+                    input.addEventListener('focus', (e) => {
+                        e.target.select();
                     });
                 });
             });
