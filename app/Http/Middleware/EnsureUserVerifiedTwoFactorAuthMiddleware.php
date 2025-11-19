@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\HasMfa;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,8 +23,8 @@ class EnsureUserVerifiedTwoFactorAuthMiddleware
             return $next($request);
         }
 
-        // check if the model has two factor authentication implemented
-        if ($user->twoFactorAuthEnabled()) {
+        // check if the model has two factor authentication implemented and user has HasMfa trait
+        if ($user->twoFactorAuthEnabled() && $user instanceof HasMfa) {
             return redirect()->route('admin.login.2fa')->with('error', __('Two factor authentication is not enabled.'));
         }
 

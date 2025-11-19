@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    @include('admin.layouts.app.combined.index')
+    @include('admin.layouts.app.default.index')
 
     @include('admin.layouts.partials.footer')
 </body>

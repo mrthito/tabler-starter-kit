@@ -13,5 +13,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified:admi
             Route::get('/profile', 'edit')->name('profile.edit');
             Route::patch('/profile', 'update')->name('profile.update');
             Route::delete('/profile', 'destroy')->name('profile.destroy');
+            Route::post('/profile/two-factor-authentication', 'twoFactorAuthentication')->name('profile.two-factor-authentication');
         });
     });

@@ -5,16 +5,18 @@ namespace App\Models;
 use App\Notifications\SendTwoFactorCodeNotification;
 use App\Traits\HasRole;
 use App\Traits\HasEncrypt;
+use App\Traits\HasMfa;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Admin extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, HasRole, HasEncrypt;
+    use Notifiable, HasRole, HasEncrypt, HasMfa;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +28,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'profile_picture_path',
     ];
 
     /**
@@ -58,9 +61,11 @@ class Admin extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    protected $appends = ['avatar'];
+
     public function twoFactorAuthEnabled(): bool
     {
-        return $this->email_verified_at !== null;
+        return $this instanceof HasMfa && $this->mfa_enabled;
     }
 
     public function sendTwoFactorAuthCode(): void
@@ -96,6 +101,9 @@ class Admin extends Authenticatable implements MustVerifyEmail
 
     public function getAvatarAttribute(): string
     {
+        if ($this->profile_picture_path != null) {
+            return asset('storage/' . $this->profile_picture_path);
+        }
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=ffffff&background=1c87c9';
     }
 }
