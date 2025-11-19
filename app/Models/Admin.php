@@ -93,4 +93,9 @@ class Admin extends Authenticatable implements MustVerifyEmail
 
         return $token->created_at > now()->subMinutes(10);
     }
+
+    public function getAvatarAttribute(): string
+    {
+        return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&color=ffffff&background=1c87c9';
+    }
 }
