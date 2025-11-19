@@ -9,8 +9,8 @@
                         @if (isset($pretitle))
                             <div class="page-pretitle">{{ $pretitle }}</div>
                         @endif
-                        @if (isset($title))
-                            <h2 class="page-title">{{ $title }}</h2>
+                        @if (isset($subtitle))
+                            <h2 class="page-title">{{ $subtitle }}</h2>
                         @endif
                     </div>
                     <div class="col-auto ms-auto d-print-none">

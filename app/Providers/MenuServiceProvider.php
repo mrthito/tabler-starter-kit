@@ -48,7 +48,7 @@ class MenuServiceProvider extends ServiceProvider
             ->position(4)
             ->permissions(['admin.users.view', 'admin.users.create'])
             ->add('Admins', 'admin.admins.index', '', 1)
-            ->add('Customers', 'admin.users.index', '', 3);
+            ->add('Users', 'admin.users.index', '', 3);
 
         // Pages
         Menu::name('admin')->create('pages', 'Pages', '#', 'file')
@@ -66,7 +66,7 @@ class MenuServiceProvider extends ServiceProvider
             ->add('Widgets', 'admin.appearance.widgets.index', '', 3);
 
         // Plugins
-        Menu::name('admin')->create('plugins', 'Plugins', 'admin.plugins.index', 'plug')
+        Menu::name('admin-right')->create('plugins', 'Plugins', 'admin.plugins.index', 'plug')
             ->position(13)
             ->permissions('admin.plugins');
 

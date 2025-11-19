@@ -27,8 +27,10 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'role_id',
         'name',
         'email',
+        'phone',
         'password',
         'profile_picture_path',
+        'status',
     ];
 
     /**
@@ -36,7 +38,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
-    protected $encryptable = ['name'];
+    protected $encryptable = ['name', 'email', 'phone'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,6 +59,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

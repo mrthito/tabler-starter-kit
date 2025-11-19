@@ -29,4 +29,28 @@
 
 {!! ToastMagic::styles() !!}
 
+<style>
+    @media (min-width: 992px) {
+        [data-vertical-style="overlay"][data-toggled="icon-overlay-close"]:not([data-icon-overlay="open"]) .app-sidebar .slide__category {
+            padding: 1.65rem;
+            position: relative;
+            display: none;
+        }
+
+        [data-vertical-style="overlay"][data-toggled="icon-overlay-close"]:not([data-icon-overlay="open"]) .menu-parent .slide {
+            display: none;
+        }
+    }
+
+    .input-group-error {
+        border: 1px solid var(--tblr-form-invalid-border-color);
+        border-radius: 0.375rem;
+    }
+
+    .was-validated .form-control:invalid,
+    .form-control.is-invalid {
+        background-image: none;
+    }
+</style>
+
 @stack('styles')

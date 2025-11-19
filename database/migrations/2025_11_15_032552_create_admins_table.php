@@ -19,11 +19,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->string('profile_picture_path')->nullable();
             $table->boolean('mfa_enabled')->default(false);
             $table->integer('mfa_method')->default(MFAMethods::NONE);
             $table->text('mfa_secret')->nullable();
             $table->text('mfa_recovery_codes')->nullable();
+            $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();
             $table->index(['name', 'email']);

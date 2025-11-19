@@ -1,6 +1,5 @@
 <div class="page">
-    @include('admin.layouts.app.combined.aside')
-    @include('admin.layouts.app.combined.header')
+    @include('admin.layouts.app.overlap.header')
     <div class="page-wrapper">
         <div class="page-header d-print-none" aria-label="Page header">
             <div class="container-xl">
