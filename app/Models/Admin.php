@@ -68,7 +68,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
 
     public function twoFactorAuthEnabled(): bool
     {
-        return $this instanceof HasMfa && $this->mfa_enabled;
+        return in_array(HasMfa::class, class_uses_recursive($this)) && $this->mfa_enabled;
     }
 
     public function sendTwoFactorAuthCode(): void

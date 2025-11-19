@@ -35,7 +35,8 @@ class TwoFactorAuthenticationController extends Controller
 
         $request->session()->regenerate();
 
-        Session::put('two_factor_authenticated', true);
+        // Use guard-specific session key
+        Session::put('two_factor_authenticated_admin', true);
 
         return redirect()->intended(route('admin.dashboard', absolute: false))->with('success', __('Two factor authentication successful.'));
     }

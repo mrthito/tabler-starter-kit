@@ -19,13 +19,27 @@ class EnsureUserVerifiedTwoFactorAuthMiddleware
     public function handle(Request $request, Closure $next, ?string $guard = 'web'): Response
     {
         $user = Auth::guard($guard)->user();
-        if (Session::get('two_factor_authenticated')) {
+
+        if (!$user) {
             return $next($request);
         }
 
-        // check if the model has two factor authentication implemented and user has HasMfa trait
-        if ($user->twoFactorAuthEnabled() && $user instanceof HasMfa) {
-            return redirect()->route('admin.login.2fa')->with('error', __('Two factor authentication is not enabled.'));
+        $sessionKey = "two_factor_authenticated_{$guard}";
+        if (Session::get($sessionKey)) {
+            return $next($request);
+        }
+
+        $usesHasMfa = in_array(HasMfa::class, class_uses_recursive($user));
+
+        if ($usesHasMfa && method_exists($user, 'twoFactorAuthEnabled')) {
+            /** @var \App\Traits\HasMfa $user */
+            if ($user->twoFactorAuthEnabled()) {
+                $routeName = $guard === 'admin' ? 'admin.login.2fa' : 'login.2fa';
+
+                if (!$request->routeIs($routeName)) {
+                    return redirect()->route($routeName)->with('error', __('Please verify your two factor authentication code.'));
+                }
+            }
         }
 
         return $next($request);
