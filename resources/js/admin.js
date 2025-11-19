@@ -9,7 +9,9 @@ import "./src/tab"
 import "./src/toast"
 import "./src/sortable"
 
-export * as bootstrap from "bootstrap"
+import * as bootstrap from "bootstrap"
+window.bootstrap = bootstrap
+
 export * as admin from "./src/admin"
 
 export {

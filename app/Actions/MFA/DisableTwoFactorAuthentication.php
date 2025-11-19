@@ -2,6 +2,8 @@
 
 namespace App\Actions\MFA;
 
+use App\Enums\MFAMethods;
+
 class DisableTwoFactorAuthentication
 {
     /**
@@ -20,6 +22,7 @@ class DisableTwoFactorAuthentication
                 'mfa_secret' => null,
                 'mfa_recovery_codes' => null,
                 'mfa_enabled' => 0,
+                'mfa_method' => MFAMethods::NONE->value,
             ])->save();
         }
     }

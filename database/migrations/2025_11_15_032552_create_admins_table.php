@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('profile_picture_path')->nullable();
             $table->boolean('mfa_enabled')->default(false);
             $table->integer('mfa_method')->default(MFAMethods::NONE);
-            $table->string('mfa_secret')->nullable();
-            $table->string('mfa_recovery_codes')->nullable();
+            $table->text('mfa_secret')->nullable();
+            $table->text('mfa_recovery_codes')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->index(['name', 'email']);

@@ -13,7 +13,7 @@ class ConfirmTwoFactorAuthentication
     public function __invoke($user)
     {
         $user->forceFill([
-            'two_factor_confirmed_at' => now(),
+            'mfa_enabled' => 1,
         ])->save();
 
         return true;
