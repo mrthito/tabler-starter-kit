@@ -31,6 +31,10 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'password',
         'profile_picture_path',
         'status',
+        'mfa_enabled',
+        'mfa_method',
+        'mfa_secret',
+        'mfa_recovery_codes',
     ];
 
     /**

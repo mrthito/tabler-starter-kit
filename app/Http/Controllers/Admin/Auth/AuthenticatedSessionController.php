@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Auth;
 
+use App\Enums\MFAMethods;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Admin;
@@ -32,7 +33,14 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::guard('admin')->user();
         if ($user->twoFactorAuthEnabled()) {
-            $user->sendTwoFactorAuthCode();
+            $mfaMethod = MFAMethods::from($user->mfa_method);
+
+            // Only send codes for Email and SMS methods
+            // Google Authenticator users will enter code from their app
+            if (in_array($mfaMethod, [MFAMethods::EMAIL, MFAMethods::SMS])) {
+                $user->sendTwoFactorAuthCode();
+            }
+
             return redirect()->route('admin.login.2fa');
         }
 

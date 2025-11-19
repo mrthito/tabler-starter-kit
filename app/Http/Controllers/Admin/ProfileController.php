@@ -91,10 +91,11 @@ class ProfileController extends Controller
                     }
                     $mfaHelper->enable($method);
 
+                    // Refresh the admin model to ensure we have the latest data
+                    $admin->refresh();
+
                     // Send code for email/SMS methods
                     if (in_array($method, [1, 2])) {
-                        // Refresh the admin model to ensure we have the latest data
-                        $admin->refresh();
                         $admin->sendTwoFactorAuthCode();
                     }
 
@@ -112,6 +113,9 @@ class ProfileController extends Controller
                     if (empty($code)) {
                         return response()->json(['success' => false, 'message' => 'Code is required'], 400);
                     }
+                    // Refresh admin model before verification to ensure we have latest data
+                    // $admin->refresh();
+                    $mfaHelper = new MFAHelper($admin);
                     $mfaHelper->submitCode($code, $method);
                     if ($mfaHelper->confirmed) {
                         return response()->json([

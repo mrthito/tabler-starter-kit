@@ -23,12 +23,24 @@ class MFAHelper
 
     public function __construct(private $user)
     {
-        if ($this->user->mfa_enabled == 0) {
-            app(DisableTwoFactorAuthentication::class)($this->user);
-        } else {
+        // Check if MFA is fully enabled and confirmed
+        if ($this->user->mfa_enabled == 1) {
             $this->confirmed = true;
             $this->showRecoveryCodes = false;
             $this->method = MFAMethods::from($this->user->mfa_method);
+        }
+        // Check if user has started MFA setup but hasn't confirmed yet (has secret/method but mfa_enabled is 0)
+        elseif (!empty($this->user->mfa_secret) || ($this->user->mfa_method != 0 && $this->user->mfa_method != null)) {
+            // User is in the middle of setup - don't clear anything!
+            $this->enabled = true;
+            if ($this->user->mfa_method) {
+                $this->method = MFAMethods::from($this->user->mfa_method);
+            }
+        }
+        // Only disable if there's truly no MFA setup (no secret, no method, not enabled)
+        // This prevents clearing the secret during the setup/verification process
+        elseif ($this->user->mfa_enabled == 0 && empty($this->user->mfa_secret) && ($this->user->mfa_method == 0 || $this->user->mfa_method == null)) {
+            app(DisableTwoFactorAuthentication::class)($this->user);
         }
     }
 
@@ -49,6 +61,7 @@ class MFAHelper
             'mfa_secret' => $this->method === MFAMethods::GOOGLE_AUTHENTICATOR ? encrypt($this->secret) : null,
             'mfa_recovery_codes' => encrypt(json_encode($this->generateCodes()))
         ])->save();
+
         $this->enabled = true;
     }
 
@@ -87,10 +100,16 @@ class MFAHelper
         }
 
         if ($this->method === MFAMethods::GOOGLE_AUTHENTICATOR) {
-            // For Google Authenticator, verify using the secret
-            if ($this->user->mfa_secret) {
+            // For Google Authenticator, verify using the secret'
+            if (empty($this->user->mfa_secret)) {
+                throw new \Exception('MFA secret not found. Please enable 2FA first. If you just enabled it, please try again.');
+            }
+
+            try {
                 $decryptedSecret = decrypt($this->user->mfa_secret);
                 $valid = app(VerifyTwoFactorCode::class)($decryptedSecret, $code);
+            } catch (\Exception $e) {
+                throw new \Exception('Failed to decrypt MFA secret: ' . $e->getMessage());
             }
         } elseif ($this->method === MFAMethods::EMAIL) {
             // For Email, verify using the user's method
