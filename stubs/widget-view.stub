@@ -1,0 +1,9 @@
+<div>
+    {{-- Widget Content Here --}}
+</div>
+
+@push('scripts')
+    <script>
+        //...
+    </script>
+@endpush

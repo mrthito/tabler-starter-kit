@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -8,9 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified:admin.verification.notice', '2fa:admin'])
     ->group(function () {
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        Route::get('/', DashboardController::class)->name('dashboard');
 
     Route::resource('roles', RoleController::class);
     Route::get('/roles/export/{filetype}', [RoleController::class, 'show'])->name('roles.export');
