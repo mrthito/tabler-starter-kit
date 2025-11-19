@@ -1,0 +1,16 @@
+<?php
+
+namespace {{ namespace }};
+
+class {{ class }} extends Widget
+{
+    protected $view = '{{ view }}';
+
+    protected $width = 'col-md-6';
+
+    public function __construct()
+    {
+        //
+    }
+}
+
