@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('guard_name');
+            $table->string('guard');
             $table->json('permissions');
             $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();
-            $table->index(['name', 'guard_name']);
+            $table->index(['name', 'guard']);
         });
     }
 

@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use App\Http\Middleware\EnsureUserVerifiedTwoFactorAuthMiddleware;
+use App\Http\Middleware\RateLimitMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,7 +29,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 return route('admin.dashboard', absolute: false);
             }
             return route('dashboard');
-        });
+        })
+        ->alias([
+            '2fa' => EnsureUserVerifiedTwoFactorAuthMiddleware::class,
+            'ratelimit' => RateLimitMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

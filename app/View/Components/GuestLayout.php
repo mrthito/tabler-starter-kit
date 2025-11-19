@@ -20,7 +20,7 @@ class GuestLayout extends Component
         $title = $this->page ? $this->page . ' - ' . config('app.name') : config('app.name');
         return match ($this->layout) {
             'web' => view('layouts.guest', compact('title')),
-            'admin' => view('admins.layouts.guest', compact('title')),
+            'admin' => view('admin.layouts.guest', compact('title')),
         };
     }
 }

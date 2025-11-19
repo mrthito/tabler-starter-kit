@@ -20,7 +20,7 @@ class AppLayout extends Component
         $title = $this->page ? $this->page . ' - ' . config('app.name') : config('app.name');
         return match ($this->layout) {
             'web' => view('layouts.app', compact('title')),
-            'admin' => view('admins.layouts.app', compact('title')),
+            'admin' => view('admin.layouts.app', compact('title')),
         };
     }
 }

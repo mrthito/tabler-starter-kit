@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Admin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -16,7 +18,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('admin.auth.login');
+        $showRegister = Admin::count() === 0;
+        $socialiteEnabled = config('services.socialite.enabled', false);
+        return view('admin.auth.login', compact('showRegister', 'socialiteEnabled'));
     }
 
     /**
@@ -25,6 +29,12 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate('admin');
+
+        $user = Auth::guard('admin')->user();
+        if ($user->twoFactorAuthEnabled()) {
+            $user->sendTwoFactorAuthCode();
+            return redirect()->route('admin.login.2fa');
+        }
 
         $request->session()->regenerate();
 
@@ -37,6 +47,9 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('admin')->logout();
+
+        // Clear 2FA session
+        Session::forget('two_factor_authenticated_admin');
 
         $request->session()->invalidate();
 

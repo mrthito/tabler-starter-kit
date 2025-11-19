@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,8 +18,11 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        if (Admin::count() > 0) {
+            abort(404);
+        }
         return view('admin.auth.register');
     }
 
@@ -29,6 +33,9 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (Admin::count() > 0) {
+            abort(404);
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . Admin::class],
@@ -36,6 +43,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $admin = Admin::create([
+            'role_id' => Role::first()->id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
