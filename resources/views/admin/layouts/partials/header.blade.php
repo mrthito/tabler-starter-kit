@@ -1,3 +1,4 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="msapplication-TileColor" content="#066fd1" />
 <meta name="theme-color" content="#066fd1" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
