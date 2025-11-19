@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UptimeMonitorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,4 @@ Route::middleware('auth')->group(function () {
 });
 
 // Status Page
-Route::get('/status', function () {
-    return view('status');
-})->name('status');
+Route::get('/status', UptimeMonitorController::class)->name('status');
