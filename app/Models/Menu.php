@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\MenuItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -125,20 +126,30 @@ class Menu extends Model
 
     /**
      * Get accessible items for a user
+     * Loads all MenuItem records from database with their children
      */
     public function getAccessibleItems($user = null)
     {
-        $items = $this->activeItems()->with('children')->get();
+        // Load ALL menu items from database (MenuItem model)
+        // This gets all items regardless of parent_id, so we can build the tree
+        $allItems = MenuItem::where('menu_id', $this->id)
+            ->where('status', true)
+            ->where('is_visible', true)
+            ->orderBy('order')
+            ->get();
 
+        // Filter by permissions if user is provided
         if (! $user) {
-            return $items->filter(function ($item) {
+            $filteredItems = $allItems->filter(function ($item) {
                 return ! $item->requiresAuth();
+            });
+        } else {
+            $filteredItems = $allItems->filter(function ($item) use ($user) {
+                return $item->isAccessible($user);
             });
         }
 
-        return $items->filter(function ($item) use ($user) {
-            return $item->isAccessible($user);
-        });
+        return $filteredItems;
     }
 
     /**
@@ -153,6 +164,67 @@ class Menu extends Model
             $item->children = $children;
             return $item;
         })->values();
+    }
+
+    /**
+     * Get menu items as array with nested children
+     */
+    public function toArrayWithChildren($user = null): array
+    {
+        $items = $this->getAccessibleItems($user);
+        return $this->buildMenuArray($items, null);
+    }
+
+    /**
+     * Build menu array structure recursively from MenuItem collection
+     * This builds the tree structure from all items loaded from database
+     */
+    protected function buildMenuArray($items, $parentId = null): array
+    {
+        $result = [];
+
+        // Filter items by parent_id and sort by order
+        $filteredItems = $items->filter(function ($item) use ($parentId) {
+            // Handle both null comparison for root items
+            if ($parentId === null) {
+                return $item->parent_id === null;
+            }
+            return $item->parent_id == $parentId;
+        })->sortBy('order')->values();
+
+        foreach ($filteredItems as $item) {
+            // Build item array from MenuItem model
+            $itemArray = [
+                'id' => $item->id,
+                'title' => $item->title,
+                'url' => $item->final_url,
+                'route' => $item->route,
+                'icon' => $item->icon,
+                'css_class' => $item->css_class,
+                'target' => $item->target,
+                'order' => $item->order,
+                'is_active' => $item->isActive(),
+                'is_visible' => $item->is_visible,
+                'status' => $item->status,
+                'linkable_type' => $item->linkable_type,
+                'linkable_id' => $item->linkable_id,
+                'permissions' => $item->permissions,
+                'roles' => $item->roles,
+                'attributes' => $item->attributes,
+                'meta' => $item->meta,
+            ];
+
+            // Recursively get children from the same collection
+            // This works because we loaded ALL items from database
+            $children = $this->buildMenuArray($items, $item->id);
+            if (!empty($children)) {
+                $itemArray['children'] = $children;
+            }
+
+            $result[] = $itemArray;
+        }
+
+        return $result;
     }
 
     /**
