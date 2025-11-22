@@ -51,11 +51,9 @@ class MenuServiceProvider extends ServiceProvider
             ->add('Users', 'admin.users.index', '', 3);
 
         // Pages
-        Menu::name('admin')->create('pages', 'Pages', '#', 'file')
+        Menu::name('admin')->create('media', 'Media', 'admin.media.index', 'file')
             ->position(6)
-            ->permissions(['admin.pages.view', 'admin.pages.create'])
-            ->add('All Pages', 'admin.pages.index', '', 1)
-            ->add('Create Page', 'admin.pages.create', '', 2);
+            ->permissions(['admin.media.view', 'admin.media.create']);
 
         //Appearance
         Menu::name('admin')->create('appearance', 'Appearance', '#', 'palette')

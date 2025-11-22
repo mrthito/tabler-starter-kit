@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -20,6 +22,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified:admi
 
         Route::resource('users', UserController::class);
         Route::get('/users/export/{filetype}', [UserController::class, 'export'])->name('users.export');
+
+        Route::get('media/list', [MediaController::class, 'list'])->name('media.list');
+        Route::get('media/folders', [MediaController::class, 'folders'])->name('media.folders');
+        Route::resource('media', MediaController::class)->names('media');
+
+        Route::resource('notifications', NotificationController::class)->only(['index', 'update', 'destroy']);
+        Route::get('notifications/unread/count', [NotificationController::class, 'unreadCount'])->name('notifications.unread.count');
 
         Route::controller(ProfileController::class)->group(function () {
             Route::get('/profile', 'edit')->name('profile.edit');
