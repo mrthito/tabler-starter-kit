@@ -1,9 +1,7 @@
 <x-app-layout :page="__('Admins')" layout="admin">
 
-    <x-slot name="breadcrumbs">
-        <div class="page-pretitle">{{ __('Admins') }}</div>
-        <h2 class="page-title">{{ __('Manage Admins') }}</h2>
-    </x-slot>
+    <x-slot name="pretitle">{{ __('Admins') }}</x-slot>
+    <x-slot name="subtitle">{{ __('Manage Admins') }}</x-slot>
 
     <x-slot name="actions">
         <a href="{{ route('admin.admins.create') }}" class="btn btn-primary">{{ __('Create Admin') }}</a>
