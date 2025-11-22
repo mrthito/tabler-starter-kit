@@ -27,7 +27,7 @@
         const deleteSelectedBtn = document.querySelector('.delete-selected-btn');
         const selectedRows = document.querySelector('#selected-rows');
 
-        if (!deleteSelectedBtn) return; // Guard clause if button doesn't exist
+        if (!deleteSelectedBtn || !selectedRows) return; // Guard clause if button or input doesn't exist
 
         // Get only CHECKED checkboxes
         const checkedBoxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
