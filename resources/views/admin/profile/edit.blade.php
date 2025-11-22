@@ -1,5 +1,8 @@
 <x-app-layout :page="__('Profile')" layout="admin">
 
+    <x-slot name="pretitle">{{ __('Profile') }}</x-slot>
+    <x-slot name="subtitle">{{ __('Profile Settings') }}</x-slot>
+
     <div class="card">
         <div class="row g-0">
             <div class="col-12 col-md-3 border-end">

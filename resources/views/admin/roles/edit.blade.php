@@ -1,9 +1,7 @@
 <x-app-layout :page="__('Edit Role')" layout="admin">
 
-    <x-slot name="breadcrumbs">
-        <div class="page-pretitle">{{ __('Roles') }}</div>
-        <h2 class="page-title">{{ __('Edit Role') }}</h2>
-    </x-slot>
+    <x-slot name="pretitle">{{ __('Roles') }}</x-slot>
+    <x-slot name="subtitle">{{ __('Edit Role') }}</x-slot>
 
     <x-slot name="actions">
         <a href="{{ route('admin.roles.index') }}" class="btn btn-primary">{{ __('Back') }}</a>
