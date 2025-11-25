@@ -33,6 +33,17 @@ class StorePostRequest extends FormRequest
             'status' => ['nullable', 'boolean'],
             'categories' => ['nullable', 'array'],
             'categories.*' => ['exists:post_categories,id'],
+            'meta_title' => ['nullable', 'string', 'max:60'],
+            'meta_description' => ['nullable', 'string', 'max:160'],
+            'meta_keywords' => ['nullable', 'string', 'max:255'],
+            'og_title' => ['nullable', 'string', 'max:60'],
+            'og_description' => ['nullable', 'string', 'max:200'],
+            'og_image' => ['nullable', 'string', 'max:255'],
+            'twitter_title' => ['nullable', 'string', 'max:60'],
+            'twitter_description' => ['nullable', 'string', 'max:200'],
+            'twitter_image' => ['nullable', 'string', 'max:255'],
+            'canonical_url' => ['nullable', 'string', 'max:255'],
+            'focus_keyword' => ['nullable', 'string', 'max:100'],
         ];
     }
 
@@ -53,6 +64,17 @@ class StorePostRequest extends FormRequest
             'is_featured' => 'featured',
             'status' => 'status',
             'categories' => 'categories',
+            'meta_title' => 'meta title',
+            'meta_description' => 'meta description',
+            'meta_keywords' => 'meta keywords',
+            'og_title' => 'og title',
+            'og_description' => 'og description',
+            'og_image' => 'og image',
+            'twitter_title' => 'twitter title',
+            'twitter_description' => 'twitter description',
+            'twitter_image' => 'twitter image',
+            'canonical_url' => 'canonical URL',
+            'focus_keyword' => 'focus keyword',
         ];
     }
 

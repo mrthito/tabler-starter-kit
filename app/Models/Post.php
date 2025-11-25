@@ -17,6 +17,17 @@ class Post extends Model
         'post_type',
         'is_featured',
         'status',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'og_title',
+        'og_description',
+        'og_image',
+        'twitter_title',
+        'twitter_description',
+        'twitter_image',
+        'canonical_url',
+        'focus_keyword',
     ];
 
     protected $casts = [

@@ -58,6 +58,176 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- SEO Section -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ __('SEO Settings') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Focus Keyword') }}</label>
+                                    <input type="text"
+                                        class="form-control @error('focus_keyword') is-invalid @enderror"
+                                        name="focus_keyword" value="{{ old('focus_keyword', $post->focus_keyword) }}"
+                                        placeholder="{{ __('Enter focus keyword') }}" id="focus_keyword">
+                                    <small class="text-muted">{{ __('Main keyword for this post') }}</small>
+                                    <x-common.error name="focus_keyword" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Meta Title') }}</label>
+                                    <input type="text" class="form-control @error('meta_title') is-invalid @enderror"
+                                        name="meta_title" value="{{ old('meta_title', $post->meta_title) }}"
+                                        placeholder="{{ __('Enter meta title (recommended: 50-60 characters)') }}"
+                                        id="meta_title" maxlength="60">
+                                    <small class="text-muted">
+                                        <span id="meta_title_count">0</span>/60 {{ __('characters') }}
+                                    </small>
+                                    <x-common.error name="meta_title" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Meta Description') }}</label>
+                                    <textarea class="form-control @error('meta_description') is-invalid @enderror" name="meta_description" rows="3"
+                                        placeholder="{{ __('Enter meta description (recommended: 150-160 characters)') }}" id="meta_description"
+                                        maxlength="160">{{ old('meta_description', $post->meta_description) }}</textarea>
+                                    <small class="text-muted">
+                                        <span id="meta_description_count">0</span>/160 {{ __('characters') }}
+                                    </small>
+                                    <x-common.error name="meta_description" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Meta Keywords') }}</label>
+                                    <input type="text"
+                                        class="form-control @error('meta_keywords') is-invalid @enderror"
+                                        name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords) }}"
+                                        placeholder="{{ __('Enter keywords separated by commas') }}">
+                                    <small class="text-muted">{{ __('Comma-separated keywords') }}</small>
+                                    <x-common.error name="meta_keywords" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Canonical URL') }}</label>
+                                    <input type="text"
+                                        class="form-control @error('canonical_url') is-invalid @enderror"
+                                        name="canonical_url" value="{{ old('canonical_url', $post->canonical_url) }}"
+                                        placeholder="{{ __('Enter canonical URL (optional)') }}">
+                                    <small class="text-muted">{{ __('Leave blank to use default post URL') }}</small>
+                                    <x-common.error name="canonical_url" />
+                                </div>
+
+                                <div class="accordion" id="seoAccordion">
+                                    <!-- Open Graph -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#ogCollapse">
+                                                {{ __('Open Graph (Facebook)') }}
+                                            </button>
+                                        </h2>
+                                        <div id="ogCollapse" class="accordion-collapse collapse"
+                                            data-bs-parent="#seoAccordion">
+                                            <div class="accordion-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('OG Title') }}</label>
+                                                    <input type="text"
+                                                        class="form-control @error('og_title') is-invalid @enderror"
+                                                        name="og_title"
+                                                        value="{{ old('og_title', $post->og_title) }}"
+                                                        placeholder="{{ __('Leave blank to use meta title') }}"
+                                                        maxlength="60">
+                                                    <x-common.error name="og_title" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('OG Description') }}</label>
+                                                    <textarea class="form-control @error('og_description') is-invalid @enderror" name="og_description" rows="2"
+                                                        placeholder="{{ __('Leave blank to use meta description') }}" maxlength="200">{{ old('og_description', $post->og_description) }}</textarea>
+                                                    <x-common.error name="og_description" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('OG Image URL') }}</label>
+                                                    <input type="text"
+                                                        class="form-control @error('og_image') is-invalid @enderror"
+                                                        name="og_image"
+                                                        value="{{ old('og_image', $post->og_image) }}"
+                                                        placeholder="{{ __('Leave blank to use featured image') }}">
+                                                    <x-common.error name="og_image" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Twitter Card -->
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#twitterCollapse">
+                                                {{ __('Twitter Card') }}
+                                            </button>
+                                        </h2>
+                                        <div id="twitterCollapse" class="accordion-collapse collapse"
+                                            data-bs-parent="#seoAccordion">
+                                            <div class="accordion-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('Twitter Title') }}</label>
+                                                    <input type="text"
+                                                        class="form-control @error('twitter_title') is-invalid @enderror"
+                                                        name="twitter_title"
+                                                        value="{{ old('twitter_title', $post->twitter_title) }}"
+                                                        placeholder="{{ __('Leave blank to use meta title') }}"
+                                                        maxlength="60">
+                                                    <x-common.error name="twitter_title" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('Twitter Description') }}</label>
+                                                    <textarea class="form-control @error('twitter_description') is-invalid @enderror" name="twitter_description"
+                                                        rows="2" placeholder="{{ __('Leave blank to use meta description') }}" maxlength="200">{{ old('twitter_description', $post->twitter_description) }}</textarea>
+                                                    <x-common.error name="twitter_description" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('Twitter Image URL') }}</label>
+                                                    <input type="text"
+                                                        class="form-control @error('twitter_image') is-invalid @enderror"
+                                                        name="twitter_image"
+                                                        value="{{ old('twitter_image', $post->twitter_image) }}"
+                                                        placeholder="{{ __('Leave blank to use featured image') }}">
+                                                    <x-common.error name="twitter_image" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEO Preview -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ __('Search Engine Preview') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="seo-preview" class="seo-preview">
+                                    <div class="mb-2">
+                                        <div class="text-primary" style="font-size: 14px; line-height: 1.3;"
+                                            id="preview_url">
+                                            {{ config('app.url') }}/posts/{{ old('slug', $post->slug) }}
+                                        </div>
+                                        <div class="fw-bold text-primary"
+                                            style="font-size: 20px; line-height: 1.3; margin-top: 2px;"
+                                            id="preview_title">
+                                            {{ old('meta_title', $post->meta_title) ?: old('title', $post->title) }}
+                                        </div>
+                                        <div class="text-muted"
+                                            style="font-size: 14px; line-height: 1.3; margin-top: 2px;"
+                                            id="preview_description">
+                                            {{ old('meta_description', $post->meta_description) ?: old('excerpt', $post->excerpt) ?: __('Enter meta description to see preview') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Sidebar -->
@@ -75,9 +245,6 @@
                                         <option value="blog"
                                             {{ old('post_type', $post->post_type) == 'blog' ? 'selected' : '' }}>
                                             {{ __('Blog') }}</option>
-                                        <option value="page"
-                                            {{ old('post_type', $post->post_type) == 'page' ? 'selected' : '' }}>
-                                            {{ __('Page') }}</option>
                                         <option value="news"
                                             {{ old('post_type', $post->post_type) == 'news' ? 'selected' : '' }}>
                                             {{ __('News') }}</option>
@@ -88,8 +255,8 @@
                                 <input type="hidden" name="status" value="0">
                                 <div class="mb-3">
                                     <label class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" name="status" value="1"
-                                            {{ old('status', $post->status) ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="checkbox" name="status"
+                                            value="1" {{ old('status', $post->status) ? 'checked' : '' }}>
                                         <span class="form-check-label">{{ __('Published') }}</span>
                                     </label>
                                 </div>
@@ -232,6 +399,80 @@
                         }
                     });
                 }
+
+                // SEO Character Counters
+                const metaTitleInput = document.getElementById('meta_title');
+                const metaDescriptionInput = document.getElementById('meta_description');
+                const metaTitleCount = document.getElementById('meta_title_count');
+                const metaDescriptionCount = document.getElementById('meta_description_count');
+
+                if (metaTitleInput && metaTitleCount) {
+                    metaTitleInput.addEventListener('input', function() {
+                        metaTitleCount.textContent = this.value.length;
+                        updateSEOPreview();
+                    });
+                    metaTitleCount.textContent = metaTitleInput.value.length;
+                }
+
+                if (metaDescriptionInput && metaDescriptionCount) {
+                    metaDescriptionInput.addEventListener('input', function() {
+                        metaDescriptionCount.textContent = this.value.length;
+                        updateSEOPreview();
+                    });
+                    metaDescriptionCount.textContent = metaDescriptionInput.value.length;
+                }
+
+                // SEO Preview Update
+                function updateSEOPreview() {
+                    const title = metaTitleInput?.value || document.querySelector('input[name="title"]')?.value ||
+                        '{{ __('Enter meta title to see preview') }}';
+                    const description = metaDescriptionInput?.value || document.querySelector(
+                        'textarea[name="excerpt"]')?.value || '{{ __('Enter meta description to see preview') }}';
+                    const slug = document.querySelector('input[name="slug"]')?.value || '{{ $post->slug }}';
+
+                    const previewTitle = document.getElementById('preview_title');
+                    const previewDescription = document.getElementById('preview_description');
+                    const previewUrl = document.getElementById('preview_url');
+
+                    if (previewTitle) {
+                        previewTitle.textContent = title || '{{ __('Enter meta title to see preview') }}';
+                    }
+                    if (previewDescription) {
+                        previewDescription.textContent = description ||
+                            '{{ __('Enter meta description to see preview') }}';
+                    }
+                    if (previewUrl && slug) {
+                        previewUrl.textContent = '{{ config('app.url') }}/posts/' + slug;
+                    }
+                }
+
+                // Update preview when title or excerpt changes
+                const titleInput = document.querySelector('input[name="title"]');
+                const excerptInput = document.querySelector('textarea[name="excerpt"]');
+                const slugInput = document.querySelector('input[name="slug"]');
+
+                if (titleInput) {
+                    titleInput.addEventListener('input', function() {
+                        if (!metaTitleInput?.value) {
+                            updateSEOPreview();
+                        }
+                    });
+                }
+
+                if (excerptInput) {
+                    excerptInput.addEventListener('input', function() {
+                        if (!metaDescriptionInput?.value) {
+                            updateSEOPreview();
+                        }
+                    });
+                }
+
+                if (slugInput) {
+                    slugInput.addEventListener('input', updateSEOPreview);
+                }
+
+                // Initial preview update
+                updateSEOPreview();
             });
         </script>
     @endpush
