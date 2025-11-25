@@ -23,9 +23,7 @@
                 </div>
                 <div class="col-md-auto col-sm-12">
                     <div class="ms-auto d-flex flex-wrap btn-list">
-                        <form
-                            action="{{ url()->current() }}"
-                            method="get" class="input-group input-group-flat w-auto">
+                        <form action="{{ url()->current() }}" method="get" class="input-group input-group-flat w-auto">
                             @foreach ($params as $key => $value)
                                 <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                             @endforeach
@@ -79,7 +77,9 @@
             <div class="table-responsive">
                 {{ $slot }}
             </div>
-            {{ $footer }}
+            @isset($footer)
+                {{ $footer }}
+            @endisset
         </div>
     </div>
 </div>

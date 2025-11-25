@@ -51,16 +51,45 @@ class MenuServiceProvider extends ServiceProvider
             ->add('Create Post', 'admin.posts.create', '', 2)
             ->add('Categories', 'admin.post-categories.index', '', 3);
 
+        // Pages
+        Menu::name('admin')->create('pages', 'Pages', '/admin/pages', 'file')
+            ->position(4)
+            ->permissions('admin.pages.view')
+            ->add('All Pages', 'admin.pages.index', '', 1)
+            ->add('Create Page', 'admin.pages.create', '', 2);
+
+        // Plans
+        Menu::name('admin')->create('plans', 'Plans', '/admin/plans', 'credit-card')
+            ->position(5)
+            ->permissions('admin.plans.view')
+            ->add('All Plans', 'admin.plans.index', '', 1)
+            ->add('Create Plan', 'admin.plans.create', '', 2);
+
+        // Coupons
+        Menu::name('admin')->create('coupons', 'Coupons', '/admin/coupons', 'ticket')
+            ->position(6)
+            ->permissions('admin.coupons.view')
+            ->add('All Coupons', 'admin.coupons.index', '', 1)
+            ->add('Create Coupon', 'admin.coupons.create', '', 2);
+
+        // Transactions
+        Menu::name('admin')->create('transactions', 'Transactions', '/admin/transactions', 'wallet')
+            ->position(7)
+            ->permissions('admin.transactions.view')
+            ->add('All Transactions', 'admin.transactions.index', '', 1)
+            ->add('Create Transaction', 'admin.transactions.create', '', 2)
+            ->add('Categories', 'admin.transaction-categories.index', '', 3);
+
         // Products
         Menu::name('admin')->create('users', 'Users', '#', 'users')
-            ->position(4)
+            ->position(8)
             ->permissions(['admin.users.view', 'admin.users.create'])
             ->add('Admins', 'admin.admins.index', '', 1)
             ->add('Users', 'admin.users.index', '', 3);
 
         // Pages
         Menu::name('admin')->create('media', 'Media', 'admin.media.index', 'file')
-            ->position(6)
+            ->position(9)
             ->permissions(['admin.media.view', 'admin.media.create']);
 
         //Appearance
@@ -87,12 +116,14 @@ class MenuServiceProvider extends ServiceProvider
             ->add('Languages', 'admin.settings.languages.index', '', 5)
             ->add('Currency', 'admin.settings.currency.index', '', 6)
             ->add('Vat & TAX', 'admin.settings.tax.index', '', 7)
+            ->add('Commission Settings', 'admin.commission-types.edit', '', 8)
             ->add('Order Settings', 'admin.settings.order-settings.index', '', 9)
             ->add('Cache Settings', 'admin.settings.cache-settings.index', '', 10)
             ->add('File Settings', 'admin.settings.file-settings.index', '', 11)
-            ->add('SSO Settings', 'admin.settings.sso-settings.index', '', 12)
-            ->add('Meta Settings', 'admin.settings.meta-settings.index', '', 13)
-            ->add('Google Settings', 'admin.settings.google-settings.index', '', 14)
-            ->add('Shipping Settings', 'admin.settings.shipping-settings.index', '', 15);
+            ->add('Storage Settings', 'admin.storage-settings.edit', '', 12)
+            ->add('SSO Settings', 'admin.settings.sso-settings.index', '', 13)
+            ->add('Meta Settings', 'admin.settings.meta-settings.index', '', 14)
+            ->add('Google Settings', 'admin.settings.google-settings.index', '', 15)
+            ->add('Shipping Settings', 'admin.settings.shipping-settings.index', '', 16);
     }
 }

@@ -5,6 +5,13 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\CommissionTypeController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\TransactionCategoryController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\StorageSettingController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\PostCategoryController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -22,6 +29,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified:admi
         Route::resource('posts', PostController::class);
 
         Route::resource('post-categories', PostCategoryController::class);
+
+        Route::resource('pages', PageController::class);
+
+        Route::resource('plans', PlanController::class);
+
+        Route::resource('coupons', CouponController::class);
+
+        // Commission Type Settings (Singleton)
+        Route::get('commission-types/edit', [CommissionTypeController::class, 'edit'])->name('commission-types.edit');
+        Route::put('commission-types', [CommissionTypeController::class, 'update'])->name('commission-types.update');
+
+        Route::resource('transaction-categories', TransactionCategoryController::class);
+        Route::resource('transactions', TransactionController::class);
+
+        // Storage Settings (Singleton)
+        Route::get('storage-settings/edit', [StorageSettingController::class, 'edit'])->name('storage-settings.edit');
+        Route::put('storage-settings', [StorageSettingController::class, 'update'])->name('storage-settings.update');
 
         Route::resource('admins', AdminController::class);
         Route::get('/admins/export/{filetype}', [AdminController::class, 'export'])->name('admins.export');
