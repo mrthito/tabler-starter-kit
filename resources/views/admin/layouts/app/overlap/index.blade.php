@@ -14,7 +14,9 @@
                     </div>
                     <div class="col-auto ms-auto d-print-none">
                         <div class="btn-list">
-                            @yield('page-actions')
+                            @isset($actions)
+                                {{ $actions }}
+                            @endisset
                         </div>
                     </div>
                 </div>

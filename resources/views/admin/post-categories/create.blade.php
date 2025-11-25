@@ -1,0 +1,140 @@
+<x-app-layout :page="__('Create Post Category')" layout="admin">
+
+    <x-slot name="pretitle">{{ __('Post Categories') }}</x-slot>
+    <x-slot name="subtitle">{{ __('Create Post Category') }}</x-slot>
+
+    <x-slot name="actions">
+        <a href="{{ route('admin.post-categories.index') }}" class="btn btn-primary">{{ __('Back') }}</a>
+    </x-slot>
+
+    <x-common.alert />
+
+    <div class="row row-cards">
+        <div class="col-12">
+            <form action="{{ route('admin.post-categories.store') }}" method="POST">
+                @csrf
+
+                <div class="row">
+                    <!-- Basic Information -->
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ __('Basic Information') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label required">{{ __('Category Name') }}</label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        name="name" value="{{ old('name') }}"
+                                        placeholder="{{ __('Enter category name') }}" required>
+                                    <x-common.error name="name" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Slug') }}</label>
+                                    <input type="text" class="form-control @error('slug') is-invalid @enderror"
+                                        name="slug" value="{{ old('slug') }}"
+                                        placeholder="{{ __('Leave blank to auto-generate from name') }}">
+                                    <small
+                                        class="text-muted">{{ __('Leave blank to auto-generate from name') }}</small>
+                                    <x-common.error name="slug" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Description') }}</label>
+                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="4"
+                                        placeholder="{{ __('Enter category description (optional)') }}">{{ old('description') }}</textarea>
+                                    <x-common.error name="description" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="col-lg-4">
+                        <!-- Category Settings -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ __('Category Settings') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('Parent Category') }}</label>
+                                    <select class="form-select @error('parent_id') is-invalid @enderror"
+                                        name="parent_id">
+                                        <option value="">{{ __('None (Top Level)') }}</option>
+                                        @foreach ($parentCategories as $parent)
+                                            <option value="{{ $parent->id }}"
+                                                {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
+                                                {{ $parent->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <small
+                                        class="text-muted">{{ __('Select a parent category to create a subcategory') }}</small>
+                                    <x-common.error name="parent_id" />
+                                </div>
+
+                                <input type="hidden" name="status" value="0">
+                                <div class="mb-3">
+                                    <label class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" name="status" value="1"
+                                            {{ old('status', true) ? 'checked' : '' }}>
+                                        <span class="form-check-label">{{ __('Active') }}</span>
+                                    </label>
+                                </div>
+                                <small class="text-muted">
+                                    {{ __('Active categories can be assigned to posts and are visible throughout the system.') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ route('admin.post-categories.index') }}" class="btn btn-secondary">
+                                        {{ __('Cancel') }}
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ti ti-check icon icon-1"></i>
+                                        {{ __('Create Category') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Auto-generate slug from name
+                const nameInput = document.querySelector('input[name="name"]');
+                const slugInput = document.querySelector('input[name="slug"]');
+                let slugManuallyEdited = false;
+
+                if (nameInput && slugInput) {
+                    nameInput.addEventListener('input', function() {
+                        if (!slugManuallyEdited && !slugInput.value) {
+                            slugInput.value = this.value.toLowerCase()
+                                .replace(/[^a-z0-9]+/g, '-')
+                                .replace(/^-+|-+$/g, '');
+                        }
+                    });
+
+                    slugInput.addEventListener('input', function() {
+                        slugManuallyEdited = true;
+                    });
+                }
+            });
+        </script>
+    @endpush
+</x-app-layout>

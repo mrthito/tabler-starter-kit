@@ -43,6 +43,14 @@ class MenuServiceProvider extends ServiceProvider
             ->add('All Roles', 'admin.roles.index', '', 1)
             ->add('Create Role', 'admin.roles.create', '', 2);
 
+        // Posts
+        Menu::name('admin')->create('posts', 'Posts', '/admin/posts', 'file-text')
+            ->position(3)
+            ->permissions('admin.posts.view')
+            ->add('All Posts', 'admin.posts.index', '', 1)
+            ->add('Create Post', 'admin.posts.create', '', 2)
+            ->add('Categories', 'admin.post-categories.index', '', 3);
+
         // Products
         Menu::name('admin')->create('users', 'Users', '#', 'users')
             ->position(4)

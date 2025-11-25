@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PostCategoryController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -16,6 +18,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'verified:admi
 
         Route::resource('roles', RoleController::class);
         Route::get('/roles/export/{filetype}', [RoleController::class, 'show'])->name('roles.export');
+
+        Route::resource('posts', PostController::class);
+
+        Route::resource('post-categories', PostCategoryController::class);
 
         Route::resource('admins', AdminController::class);
         Route::get('/admins/export/{filetype}', [AdminController::class, 'export'])->name('admins.export');
